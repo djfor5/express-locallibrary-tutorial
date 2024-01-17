@@ -6,17 +6,21 @@ const logger = require('morgan');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
+const catalogRouter = require("./routes/catalog"); //Import routes for "catalog" area of site
 
 const app = express();
 
 const mongoose = require('mongoose')
 mongoose.set("strictQuery", false);
 
-const USER = process.env.USER
-const PASSWORD = process.env.PASSWORD
-const database = 'local_library'
+// const USER = process.env.USER
+// const PASSWORD = process.env.PASSWORD
+// const database = 'local_library'
 
-const mongoDB = `mongodb+srv://${USER}:${PASSWORD}@cluster0.xx4m2p7.mongodb.net/${database}?retryWrites=true&w=majority`;
+// const mongoDB = "mongodb://127.0.0.1/my_database";
+// const mongoDB = `mongodb+srv://${USER}:${PASSWORD}@cluster0.xx4m2p7.mongodb.net/?retryWrites=true&w=majority`;
+// const mongoDB = `mongodb+srv://${USER}:${PASSWORD}@cluster0.xx4m2p7.mongodb.net/${database}?retryWrites=true&w=majority`;
+const mongoDB = process.env.MONGO_URI
 
 main().catch((err) => console.log(err));
 async function main() {
@@ -35,6 +39,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use("/catalog", catalogRouter); // Add catalog routes to middleware chain.
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
